@@ -9,14 +9,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class EmailService {
     @Autowired
-    private JavaMailSender emailSender;
+    private JavaMailSender javaMailSender;
 
-    public void sendEmail(Mail mail) {
+    public void send(Mail mail) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(mail.getFrom());
         message.setTo(mail.getTo());
         message.setSubject(mail.getSubject());
         message.setText(mail.getBody());
-        emailSender.send(message);
+        javaMailSender.send(message);
     }
 }

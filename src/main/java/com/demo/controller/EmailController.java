@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/mail")
-public class MainController {
+public class EmailController {
     @Autowired
     private EmailService emailService;
 
     @PutMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public void main(@RequestBody Mail mail) {
-        emailService.sendEmail(mail);
+    public void send(@RequestBody Mail mail) {
+        emailService.send(mail);
     }
 }
