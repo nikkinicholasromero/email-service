@@ -1,8 +1,11 @@
 package com.demo;
 
+import com.demo.mock.MockJavaMailSender;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
@@ -35,7 +38,9 @@ public class ApplicationConfig {
     private String debug;
 
     @Bean
-    public JavaMailSender emailSender() {
+    @Primary
+    @Profile("!mock")
+    public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost(host);
         mailSender.setPort(port);
@@ -50,5 +55,11 @@ public class ApplicationConfig {
         props.put("mail.debug", debug);
 
         return mailSender;
+    }
+
+    @Bean
+    @Profile("mock")
+    public JavaMailSender mockJavaMailSender() {
+        return new MockJavaMailSender();
     }
 }
