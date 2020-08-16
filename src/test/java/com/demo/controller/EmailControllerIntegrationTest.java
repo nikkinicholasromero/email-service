@@ -25,7 +25,7 @@ public class EmailControllerIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Test
-    public void send() throws Exception {
+    public void send_whenSendingIsSuccessful_thenReturn201StatusCode() throws Exception {
         Mail mail = new Mail();
         mail.setFrom("from@email.com");
         mail.setTo("to@email.com");
@@ -37,5 +37,20 @@ public class EmailControllerIntegrationTest {
                 .content(objectMapper.writeValueAsString(mail)))
                 .andDo(print())
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void send_whenSendingFailed_thenReturn503StatusCode() throws Exception {
+        Mail mail = new Mail();
+        mail.setFrom("from@email.com");
+        mail.setTo("invalid@email.com");
+        mail.setSubject("Test Subject");
+        mail.setBody("Test body");
+
+        this.mockMvc.perform(put("/mail")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(mail)))
+                .andDo(print())
+                .andExpect(status().isInternalServerError());
     }
 }

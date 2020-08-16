@@ -1,22 +1,34 @@
 package com.demo.service;
 
+import com.demo.exception.EmailSenderException;
 import com.demo.model.Mail;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class EmailService {
+    @Value("${mailgun.send.host}")
+    private String host;
+
+    @Value("${mailgun.send.endpoint}")
+    private String endpoint;
+
+    @Value("${mailgun.send.api}")
+    private String api;
+
     @Autowired
-    private JavaMailSender javaMailSender;
+    private MailGunService mailGunService;
 
     public void send(Mail mail) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(mail.getFrom());
-        message.setTo(mail.getTo());
-        message.setSubject(mail.getSubject());
-        message.setText(mail.getBody());
-        javaMailSender.send(message);
+        try {
+            boolean successful = mailGunService.send(host + endpoint, api, mail);
+            if (!successful) {
+                throw new UnirestException("");
+            }
+        } catch (UnirestException e) {
+            throw new EmailSenderException();
+        }
     }
 }
