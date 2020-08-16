@@ -7,14 +7,11 @@ jobs:
   build:
     machine: true
     steps:
-      - checkout
+      - maven/test
       - run: docker build --tag nikkinicholasromero/email-service-image:0.1 .
       - run: echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
       - run: docker push nikkinicholasromero/email-service-image:0.1
 workflows:
   maven_test_build:
     jobs:
-      - maven/test
       - build:
-          requires:
-            - maven/test
