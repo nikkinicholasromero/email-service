@@ -7,3 +7,17 @@ workflows:
   maven_test:
     jobs:
       - maven/test # checkout, build, test, and upload test results
+  docker_image:
+    jobs:
+      - run:
+          name: Build Image
+          command: |
+            docker build --tag nikkinicholasromero/email-service-image:0.1 .
+      - run:
+          name: Docker Login
+          command: |
+            echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+      - run:
+          name: Push Image
+          command: |
+            docker push nikkinicholasromero/email-service-image:0.1
