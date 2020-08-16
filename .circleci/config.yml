@@ -5,19 +5,12 @@ orbs:
 
 jobs:
   build:
+    machine: true
     steps:
-      -run:
-          name: Build Image
-          command: |
-            docker build --tag nikkinicholasromero/email-service-image:0.1 .
-      - run:
-          name: Docker Login
-          command: |
-            echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
-      - run:
-          name: Push Image
-          command: |
-            docker push nikkinicholasromero/email-service-image:0.1
+      - checkout
+      - run: docker build --tag nikkinicholasromero/email-service-image:0.1 .
+      - run: echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+      - run: docker push nikkinicholasromero/email-service-image:0.1
 workflows:
   maven_test_:
     jobs:
