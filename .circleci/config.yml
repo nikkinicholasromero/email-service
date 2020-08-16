@@ -3,13 +3,10 @@ version: 2.1
 orbs:
   maven: circleci/maven@0.0.12
 
-workflows:
-  maven_test:
-    jobs:
-      - maven/test # checkout, build, test, and upload test results
-  docker_image:
-    jobs:
-      - run:
+jobs:
+  build:
+    steps:
+      -run:
           name: Build Image
           command: |
             docker build --tag nikkinicholasromero/email-service-image:0.1 .
@@ -21,3 +18,7 @@ workflows:
           name: Push Image
           command: |
             docker push nikkinicholasromero/email-service-image:0.1
+workflows:
+  maven_test_:
+    jobs:
+      - maven/test/build
