@@ -24,7 +24,7 @@ public class MailGunServiceImpl implements MailGunService {
                     .queryString("from", mail.getFrom())
                     .queryString("to", mail.getTo())
                     .queryString("subject", mail.getSubject())
-                    .queryString("text", mail.getSubject())
+                    .queryString("text", mail.getBody())
                     .asJson().getStatus() == 200;
         } catch (UnirestException e) {
             throw new EmailSenderException();
