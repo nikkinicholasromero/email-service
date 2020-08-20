@@ -2,7 +2,6 @@ package com.demo.service;
 
 import com.demo.exception.EmailSenderException;
 import com.demo.model.Mail;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,12 +21,15 @@ public class EmailService {
     private MailGunService mailGunService;
 
     public void send(Mail mail) {
-        try {
-            boolean successful = mailGunService.send(host + endpoint, api, mail);
-            if (!successful) {
-                throw new UnirestException("");
-            }
-        } catch (UnirestException e) {
+        boolean successful;
+
+        if (mail.getTemplate() != null) {
+            successful = mailGunService.sendTemplate(host + endpoint, api, mail);
+        } else {
+            successful = mailGunService.sendTextBody(host + endpoint, api, mail);
+        }
+
+        if (!successful) {
             throw new EmailSenderException();
         }
     }

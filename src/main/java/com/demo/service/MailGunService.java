@@ -1,8 +1,10 @@
 package com.demo.service;
 
 import com.demo.model.Mail;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
 public interface MailGunService {
-    boolean send(String url, String api, Mail mail) throws UnirestException;
+    boolean sendTextBody(String url, String api, Mail mail);
+    boolean sendTemplate(String url, String api, Mail mail);
 }
