@@ -25,7 +25,7 @@ public class EmailControllerIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Test
-    public void send_whenSendingWithoutTemplateIsSuccessful_thenReturn201StatusCode() throws Exception {
+    public void send() throws Exception {
         Mail mail = new Mail();
         mail.setFrom("from@email.com");
         mail.setTo("to@email.com");
@@ -37,53 +37,5 @@ public class EmailControllerIntegrationTest {
                 .content(objectMapper.writeValueAsString(mail)))
                 .andDo(print())
                 .andExpect(status().isCreated());
-    }
-
-    @Test
-    public void send_whenSendingWithoutTemplateFailed_thenReturn503StatusCode() throws Exception {
-        Mail mail = new Mail();
-        mail.setFrom("from@email.com");
-        mail.setTo("invalid@email.com");
-        mail.setSubject("Test Subject");
-        mail.setBody("Test body");
-
-        this.mockMvc.perform(put("/mail")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(mail)))
-                .andDo(print())
-                .andExpect(status().isInternalServerError());
-    }
-
-
-    @Test
-    public void send_whenSendingWithTemplateIsSuccessful_thenReturn201StatusCode() throws Exception {
-        Mail mail = new Mail();
-        mail.setFrom("from@email.com");
-        mail.setTo("to@email.com");
-        mail.setSubject("Test Subject");
-        mail.setTemplate("activation_template");
-        mail.setTemplateVariables("{\"accountActivationLink\": \"https://github.com/nikkinicholasromero\"}");
-
-        this.mockMvc.perform(put("/mail")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(mail)))
-                .andDo(print())
-                .andExpect(status().isCreated());
-    }
-
-    @Test
-    public void send_whenSendingWithTemplateFailed_thenReturn503StatusCode() throws Exception {
-        Mail mail = new Mail();
-        mail.setFrom("from@email.com");
-        mail.setTo("invalid@email.com");
-        mail.setSubject("Test Subject");
-        mail.setTemplate("activation_template");
-        mail.setTemplateVariables("{\"accountActivationLink\": \"https://github.com/nikkinicholasromero\"}");
-
-        this.mockMvc.perform(put("/mail")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(mail)))
-                .andDo(print())
-                .andExpect(status().isInternalServerError());
     }
 }

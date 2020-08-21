@@ -1,7 +1,7 @@
 package com.demo.controller;
 
+import com.demo.external.mailgun.EmailService;
 import com.demo.model.Mail;
-import com.demo.service.EmailService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
