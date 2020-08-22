@@ -44,8 +44,12 @@ public class EmailService {
     }
 
     public void send(Mail mail) {
-        ResponseEntity<Object> object = restTemplate.postForEntity(getUrl(), getHeaders(mail), Object.class);
-        if (HttpStatus.OK != object.getStatusCode()) {
+        try {
+            ResponseEntity<Object> object = restTemplate.postForEntity(getUrl(), getHeaders(mail), Object.class);
+            if (HttpStatus.OK != object.getStatusCode()) {
+                throw new EmailSenderException();
+            }
+        } catch (Exception e) {
             throw new EmailSenderException();
         }
     }
